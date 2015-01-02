@@ -21,9 +21,10 @@ public class Line extends View {
     private int securityLevel;
     private int textStartHeight;
 
-    private String message_one;
-    private String message_two;
-    private String message_three;
+    // Initial messages printet depending on password strength
+    private String message_one = "Password too weak!";
+    private String message_two = "Fair password, you can do better!";
+    private String message_three = "Your password is strong like the Hulk!";
 
     // Width of the coloured lines
     private int lineWidth;
@@ -91,7 +92,15 @@ public class Line extends View {
         return minimumTextLength;
     }
 
-    public void setMessageLevel1
+    public void setMessageLevelOne(String message) {
+        this.message_one = message;
+    }
+    public void setMessageLevelTwo(String message) {
+        this.message_two = message;
+    }
+    public void setMessageLevelThree(String message) {
+        this.message_three = message;
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -141,7 +150,7 @@ public class Line extends View {
         canvas.drawLine(0, 0, lineWidth, 0, red);
         canvas.drawLine(secondStart, 0, secondStart + lineWidth,0, grey);
         canvas.drawLine(width, 0, width - lineWidth, 0, grey);
-        String text = "Your password is too weak!";
+        String text = message_one;
         canvas.drawText(text, (width/2) - textPaint.measureText(text)/2, textStartHeight, textPaint);
     }
     /*
@@ -153,7 +162,7 @@ public class Line extends View {
         canvas.drawLine(0, 0, lineWidth, 0, yellow);
         canvas.drawLine(secondStart, 0, secondStart + lineWidth,0, yellow);
         canvas.drawLine(width, 0, width - lineWidth, 0, grey);
-        String text = "Password accepted. We Recommend a stronger password";
+        String text = message_two;
         float centerText = (width/2) - textPaint.measureText(text)/2;
         canvas.drawText(text, centerText, textStartHeight,textPaint);
     }
@@ -166,7 +175,7 @@ public class Line extends View {
         canvas.drawLine(0, 0, lineWidth, 0, green);
         canvas.drawLine(secondStart, 0, secondStart + lineWidth,0, green);
         canvas.drawLine(width, 0, width - lineWidth, 0, green);
-        String text = "Your password is strong like the Hulk!";
+        String text = message_three;
         float centerText = (width/2) - textPaint.measureText(text)/2;
         canvas.drawText(text, centerText, textStartHeight,textPaint);
     }

@@ -59,25 +59,30 @@ public class PasswordStrength extends LinearLayout {
         addView(lines);
     }
 
+    // Setters....
     public void setLineHeight(float lineHeight) {
         lines.setLineHeight(lineHeight);
     }
     public void setMinimumLength(int length) {
         lines.setMinimumTextLength(length);
     }
-    public void setMessageLevel1(String message) {
-
+    public void setMessageLevelOne(String message) {
+        lines.setMessageLevelOne(message);
     }
-    public void setMessageLevel2(String message) {
-
+    public void setMessageLevelTwo(String message) {
+        lines.setMessageLevelTwo(message);
     }
-    public void setMessageLevel3(String message) {
-
+    public void setMessageLevelThree(String message) {
+        lines.setMessageLevelThree(message);
     }
 
     /**
      * Get the difficulty level for the password typed in the text field
-     * Override this to change the algorithm for your Password Strength Meter
+     * Override this to change the algorithm for your Password Strength Meter.
+     * 0 - Too short password
+     * 1 - Too weak password, not accepted
+     * 2 - Accepted password. Recommend a stronger though
+     * 3 - A strong password!
      * @param password String which is your typed password
      * @return Int between 0-3 depending on difficulty on input
      */
@@ -87,9 +92,9 @@ public class PasswordStrength extends LinearLayout {
             return 0;
         } else if (password.length() == min) {
             return 1;
-        } else if (password.length() > min && password.length() < min + 3) {
+        } else if (password.length() > min && password.length() <= min + 3) {
             return 2;
-        } else if(password.length() >= min + 3){
+        } else if(password.length() > min + 3){
             return 3;
         } else
             return  3;
