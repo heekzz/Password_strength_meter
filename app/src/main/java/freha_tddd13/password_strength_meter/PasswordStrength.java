@@ -97,6 +97,7 @@ public class PasswordStrength extends LinearLayout {
      */
     public void setMinimumLength(int minimumLength) {
         this.minimumPasswordLength = minimumLength;
+        textField.setHint("Minimum of " + minimumPasswordLength + " chars in length");
     }
 
 
@@ -119,12 +120,15 @@ public class PasswordStrength extends LinearLayout {
            For every criteria the password fulfills we increase the strength */
         if (password.length() >= minimumPasswordLength) {
             strength++;
-            if (password.length() >= 12)
+            if (password.length() >= 12) {
                 strength++;
-            if (matcher1.find())
+            }
+            if (matcher1.find()) {
                 strength++;
-            if (matcher2.find())
+            }
+            if (matcher2.find()) {
                 strength++;
+            }
         }
         return strength;
 
