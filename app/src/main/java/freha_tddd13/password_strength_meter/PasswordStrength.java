@@ -94,8 +94,12 @@ public class PasswordStrength extends LinearLayout {
         progressBar.setLayoutParams(params);
         textField.setLayoutParams(params);
 
+        /**
+         * Button to 'Enter Password'
+         * When pressed it clears the textField
+         */
         button = new Button(context);
-        button.setText("Submit");
+        button.setText("Enter password");
         button.setLayoutParams(new LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -111,6 +115,9 @@ public class PasswordStrength extends LinearLayout {
             }
         });
 
+        /**
+         * Checkbox that gives the option to see the password
+         */
         checkBox = new CheckBox(context);
         checkBox.setText("Show password");
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
