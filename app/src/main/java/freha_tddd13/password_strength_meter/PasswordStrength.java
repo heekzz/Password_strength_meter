@@ -8,10 +8,16 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +29,8 @@ public class PasswordStrength extends LinearLayout {
     private TextView strengthText; // Prints "Password strength"
     private TextView strengthTextHint; // Prints how strong the password is
     private ColorFilter defaultProgBarColor;
+    private Button button;
+    private CheckBox checkBox;
     Context context;
 
     // Minimum length of password
@@ -86,9 +94,45 @@ public class PasswordStrength extends LinearLayout {
         progressBar.setLayoutParams(params);
         textField.setLayoutParams(params);
 
+        button = new Button(context);
+        button.setText("Submit");
+        button.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (strengthTextHint.getText().equals("TOO SHORT")) {
+                            Toast.makeText(context, "Enter at least " + minimumPasswordLength + " chars", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "All done!", Toast.LENGTH_SHORT).show();
+                            textField.setText("");
+                        }
+                    }
+                });
+
+        checkBox = new CheckBox(context);
+        checkBox.setText("Show password");
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){
+                    textField.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                }
+                else{
+                    textField.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                }
+                textField.setSelection(textField.getText().length());
+            }
+        });
+
+
         addView(textField);
         addView(textLayout);
         addView(progressBar);
+        addView(checkBox);
+        addView(button);
     }
 
     /**
