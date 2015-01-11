@@ -94,23 +94,30 @@ public class PasswordStrength extends LinearLayout {
         progressBar.setLayoutParams(params);
         textField.setLayoutParams(params);
 
+        /**
+         * Button to 'Enter Password'
+         * When pressed it clears the textField
+         */
         button = new Button(context);
-        button.setText("Submit");
+        button.setText("Enter password");
         button.setLayoutParams(new LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-                button.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (strengthTextHint.getText().equals("TOO SHORT")) {
-                            Toast.makeText(context, "Enter at least " + minimumPasswordLength + " chars", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "All done!", Toast.LENGTH_SHORT).show();
-                            textField.setText("");
-                        }
-                    }
-                });
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (strengthTextHint.getText().equals("TOO SHORT")) {
+                    Toast.makeText(context, "Enter at least " + minimumPasswordLength + " chars", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "All done!", Toast.LENGTH_SHORT).show();
+                    textField.setText("");
+                }
+            }
+        });
 
+        /**
+         * Checkbox that gives the option to see the password
+         */
         checkBox = new CheckBox(context);
         checkBox.setText("Show password");
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -224,4 +231,3 @@ public class PasswordStrength extends LinearLayout {
 
 
 }
-
