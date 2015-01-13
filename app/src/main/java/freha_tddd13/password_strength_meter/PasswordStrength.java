@@ -243,6 +243,7 @@ public class PasswordStrength extends LinearLayout {
         }
 
     }
+    int r = 3;
 
 
 
