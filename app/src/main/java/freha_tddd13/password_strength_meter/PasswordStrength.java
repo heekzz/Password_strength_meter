@@ -31,6 +31,7 @@ public class PasswordStrength extends LinearLayout {
     private ColorFilter defaultProgBarColor;
     private Button button;
     private CheckBox checkBox;
+    private boolean isValid = false;
     Context context;
 
     // Minimum length of password
@@ -106,11 +107,13 @@ public class PasswordStrength extends LinearLayout {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (strengthTextHint.getText().equals("TOO SHORT")) {
-                    Toast.makeText(context, "Enter at least " + minimumPasswordLength + " chars", Toast.LENGTH_SHORT).show();
-                } else {
+            // Let's the user know what error was made
+                if (isValid) {
                     Toast.makeText(context, "All done!", Toast.LENGTH_SHORT).show();
                     textField.setText("");
+                } else {
+                    Toast.makeText(context, "Password is " + strengthTextHint.getText().toString().toLowerCase() +
+                            ", try again",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -164,12 +167,20 @@ public class PasswordStrength extends LinearLayout {
         int strength = 0;
         Pattern pattern1 = Pattern.compile("([A-Z])"); // Contains a uppercase letter
         Pattern pattern2 = Pattern.compile("([!#€%&/()=?)])"); // Contains a special character
+        Pattern pattern3 = Pattern.compile("\\s"); // Contains blank space
         Matcher matcher1 = pattern1.matcher(password);
         Matcher matcher2 = pattern2.matcher(password);
+        Matcher matcher3 = pattern3.matcher(password);
 
         /* Must always be at least longer than the minimum length
            For every criteria the password fulfills we increase the strength */
-        if (password.length() >= minimumPasswordLength) {
+        if(matcher3.find()){
+//            Toast.makeText(context,"No spaces dude", Toast.LENGTH_SHORT).show();
+            strength = 5;
+            isValid = false;
+        }
+        else if (password.length() >= minimumPasswordLength) {
+            isValid = true;
             strength++;
             if (password.length() >= 12) {
                 strength++;
@@ -199,6 +210,11 @@ public class PasswordStrength extends LinearLayout {
     protected void setStrength(int strength) {
         progressBar.setProgress(strength);
         switch (strength) {
+            case (5):
+                strengthTextHint.setText("NOT VALID");
+                strengthTextHint.setTextColor(Color.RED);
+                progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                break;
             case 0:
                 strengthTextHint.setText("TOO SHORT");
                 strengthTextHint.setTextColor(Color.GRAY);
@@ -206,8 +222,8 @@ public class PasswordStrength extends LinearLayout {
                 break;
             case 1:
                 strengthTextHint.setText("WEAK");
-                strengthTextHint.setTextColor(Color.RED);
-                progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                strengthTextHint.setTextColor(Color.parseColor("#FFA500"));
+                progressBar.getProgressDrawable().setColorFilter(Color.parseColor("#FFA500"), PorterDuff.Mode.SRC_IN);
                 break;
             case 2:
                 strengthTextHint.setText("FAIR");
