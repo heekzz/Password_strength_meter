@@ -164,6 +164,8 @@ public class PasswordStrength extends LinearLayout {
      * 1 = weak password, 2 = fair password, 3 = good password, 4 = strong password.
      */
     protected int getStrength(String password) {
+
+        isValid = false;
         int strength = 0;
         Pattern pattern1 = Pattern.compile("([A-Z])"); // Contains a uppercase letter
         Pattern pattern2 = Pattern.compile("([!#€%&/()=?)])"); // Contains a special character
@@ -172,16 +174,12 @@ public class PasswordStrength extends LinearLayout {
         Matcher matcher2 = pattern2.matcher(password);
         Matcher matcher3 = pattern3.matcher(password);
 
-        /* Must always be at least longer than the minimum length
+        /* Must always be at least longer than the minimum length and not contain
+           a blank space to be a valid password
            For every criteria the password fulfills we increase the strength
-            If the password contains a blank space, it is invalid*/
+        */
         if(matcher3.find()){
-            isValid = false;
             return 5;
-        }
-        if(password.length() < minimumPasswordLength){
-            isValid = false;
-            strength = 0;
         }
         else if (password.length() >= minimumPasswordLength) {
             isValid = true;
