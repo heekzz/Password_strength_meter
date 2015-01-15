@@ -164,6 +164,8 @@ public class PasswordStrength extends LinearLayout {
      * 1 = weak password, 2 = fair password, 3 = good password, 4 = strong password.
      */
     protected int getStrength(String password) {
+
+        isValid = false;
         int strength = 0;
         Pattern pattern1 = Pattern.compile("([A-Z])"); // Contains a uppercase letter
         Pattern pattern2 = Pattern.compile("([!#€%&/()=?)])"); // Contains a special character
@@ -172,12 +174,12 @@ public class PasswordStrength extends LinearLayout {
         Matcher matcher2 = pattern2.matcher(password);
         Matcher matcher3 = pattern3.matcher(password);
 
-        /* Must always be at least longer than the minimum length
-           For every criteria the password fulfills we increase the strength */
+        /* Must always be at least longer than the minimum length and not contain
+           a blank space to be a valid password
+           For every criteria the password fulfills we increase the strength
+        */
         if(matcher3.find()){
-//            Toast.makeText(context,"No spaces dude", Toast.LENGTH_SHORT).show();
-            strength = 5;
-            isValid = false;
+            return 5;
         }
         else if (password.length() >= minimumPasswordLength) {
             isValid = true;
@@ -210,11 +212,7 @@ public class PasswordStrength extends LinearLayout {
     protected void setStrength(int strength) {
         progressBar.setProgress(strength);
         switch (strength) {
-            case (5):
-                strengthTextHint.setText("NOT VALID");
-                strengthTextHint.setTextColor(Color.RED);
-                progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-                break;
+
             case 0:
                 strengthTextHint.setText("TOO SHORT");
                 strengthTextHint.setTextColor(Color.GRAY);
@@ -235,13 +233,20 @@ public class PasswordStrength extends LinearLayout {
                 strengthTextHint.setTextColor(Color.parseColor("#3399FF"));
                 progressBar.getProgressDrawable().setColorFilter(Color.parseColor("#3399FF"), PorterDuff.Mode.SRC_IN);
                 break;
-            default:
+            case 4:
                 strengthTextHint.setText("STRONG");
                 strengthTextHint.setTextColor(Color.parseColor("#66CC00"));
                 progressBar.getProgressDrawable().setColorFilter(Color.parseColor("#66CC00"), PorterDuff.Mode.SRC_IN);
                 break;
+            case 5:
+                strengthTextHint.setText("NOT VALID");
+                strengthTextHint.setTextColor(Color.RED);
+                progressBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                break;
         }
 
     }
+
+
 
 }
