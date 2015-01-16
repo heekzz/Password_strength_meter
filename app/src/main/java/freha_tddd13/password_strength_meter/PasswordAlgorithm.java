@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class PasswordAlgorithm {
 
     private boolean isValid;
-    private int minimumPasswordLength;
+    private int minimumPasswordLength = 6;
 
 
     /**

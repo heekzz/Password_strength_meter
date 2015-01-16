@@ -17,8 +17,9 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
        final PasswordStrength pw = (PasswordStrength) findViewById(R.id.pw);
-        pw.setMinimumLength(6);
         pw.setAlgotrithm(new DennisAlgorithm());
+        pw.setMinimumLength(5);
+
         Button b = (Button) findViewById(R.id.button);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
