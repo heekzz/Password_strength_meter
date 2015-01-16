@@ -8,19 +8,12 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PasswordStrength extends LinearLayout {
 
@@ -29,10 +22,10 @@ public class PasswordStrength extends LinearLayout {
     private TextView strengthText; // Prints "Password strength"
     private TextView strengthTextHint; // Prints how strong the password is
     private ColorFilter defaultProgBarColor;
-    private Button button;
     private CheckBox checkBox;
-    private boolean isValid = false;
     Context context;
+
+    private PasswordAlgorithm algorithm;
 
     // Minimum length of password
     private int minimumPasswordLength = 6;
@@ -71,6 +64,8 @@ public class PasswordStrength extends LinearLayout {
         textLayout.addView(strengthText);
         textLayout.addView(strengthTextHint);
 
+        algorithm = new PasswordAlgorithm();
+
         // Saves the default color of the progressbar so w
         defaultProgBarColor = progressBar.getProgressDrawable().getColorFilter();
 
@@ -83,7 +78,7 @@ public class PasswordStrength extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int x = getStrength(s.toString());
+                int x = algorithm.getStrength(s.toString());
                 setStrength(x);
             }
 
@@ -95,28 +90,7 @@ public class PasswordStrength extends LinearLayout {
         progressBar.setLayoutParams(params);
         textField.setLayoutParams(params);
 
-        /**
-         * Button to 'Enter Password'
-         * When pressed it clears the textField
-         */
-        button = new Button(context);
-        button.setText("Enter password");
-        button.setLayoutParams(new LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            // Let's the user know what error was made
-                if (isValid) {
-                    Toast.makeText(context, "All done!", Toast.LENGTH_SHORT).show();
-                    textField.setText("");
-                } else {
-                    Toast.makeText(context, "Password is " + strengthTextHint.getText().toString().toLowerCase() +
-                            ", try again",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
 
         /**
          * Checkbox that gives the option to see the password
@@ -142,7 +116,6 @@ public class PasswordStrength extends LinearLayout {
         addView(textLayout);
         addView(progressBar);
         addView(checkBox);
-        addView(button);
     }
 
     /**
@@ -151,52 +124,10 @@ public class PasswordStrength extends LinearLayout {
      */
     public void setMinimumLength(int minimumLength) {
         this.minimumPasswordLength = minimumLength;
+        algorithm.setMinimumPasswordLength(minimumLength);
         textField.setHint("Minimum of " + minimumPasswordLength + " chars in length");
     }
 
-
-    /**
-     * Returns a integer value representing the strength of the password.
-     * The value can go from 0 to 4 or bigger but the component only changes on the values 0-4.
-     * Values higher than 4 gives the same result as 4.
-     * @param password Password you want to check strength of
-     * @return integer values from 0 and bigger, 0 = too short password,
-     * 1 = weak password, 2 = fair password, 3 = good password, 4 = strong password.
-     */
-    protected int getStrength(String password) {
-
-        isValid = false;
-        int strength = 0;
-        Pattern pattern1 = Pattern.compile("([A-Z])"); // Contains a uppercase letter
-        Pattern pattern2 = Pattern.compile("([!#€%&/()=?)])"); // Contains a special character
-        Pattern pattern3 = Pattern.compile("\\s"); // Contains blank space
-        Matcher matcher1 = pattern1.matcher(password);
-        Matcher matcher2 = pattern2.matcher(password);
-        Matcher matcher3 = pattern3.matcher(password);
-
-        /* Must always be at least longer than the minimum length and not contain
-           a blank space to be a valid password
-           For every criteria the password fulfills we increase the strength
-        */
-        if(matcher3.find()){
-            return 5;
-        }
-        else if (password.length() >= minimumPasswordLength) {
-            isValid = true;
-            strength++;
-            if (password.length() >= 12) {
-                strength++;
-            }
-            if (matcher1.find()) {
-                strength++;
-            }
-            if (matcher2.find()) {
-                strength++;
-            }
-        }
-        return strength;
-
-    }
 
     /**
      * Method that handles all the graphic parts. Changing the color of the progressbar
@@ -248,5 +179,15 @@ public class PasswordStrength extends LinearLayout {
     }
 
 
+    public void setAlgotrithm(PasswordAlgorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 
+    public boolean isValid() {
+        return algorithm.isValid();
+    }
+
+    public String getPasswordStatus() {
+        return strengthTextHint.getText().toString();
+    }
 }

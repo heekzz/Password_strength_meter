@@ -8,7 +8,13 @@
     <freha_tddd13.password_strength_meter.PasswordStrength
         android:id="@+id/pw"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"/>
+        android:layout_below="@+id/pw"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
 
 </RelativeLayout>

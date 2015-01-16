@@ -4,6 +4,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -13,8 +16,20 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PasswordStrength pw = (PasswordStrength) findViewById(R.id.pw);
+       final PasswordStrength pw = (PasswordStrength) findViewById(R.id.pw);
         pw.setMinimumLength(6);
+        pw.setAlgotrithm(new DennisAlgorithm());
+        Button b = (Button) findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pw.isValid()){
+                    Toast.makeText(getApplicationContext(),"All done",Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(getApplicationContext(), "Password is " +
+                        pw.getPasswordStatus().toLowerCase() + ", try again",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
